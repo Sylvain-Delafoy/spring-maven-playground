@@ -1,0 +1,28 @@
+version: '3'
+services:
+  service-candidat:
+    # si sbt te construit déjà l'image docker, met là ici:
+    image: springdocker
+    # si tu as un dockerfile:
+    # build: ./serviceweb
+    environment:
+    - DATASOURCE_URL=jdbc:postgresql://mydb/somedb
+    - DB_USER=postgres
+    - DB_PASSWORD=postgres
+    volumes:
+    - ./etc/service.cfg:/etc/service.cfg
+    - ./var/service:/var/service
+    ports:
+    - "8080:8080"
+  mydb:
+    image: postgres:10.1
+    ports:
+    - "5432:5432"
+    volumes:
+    - ./postgres/db-candidat/postgres-data:/var/lib/postgresql
+    - ./postgres/db-candidat/postgres-config:/etc/postgresql
+    - ./postgres/db-candidat/postgres-log:/var/log/postgresql
+    environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_DB=somedb
